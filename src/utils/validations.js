@@ -6,14 +6,17 @@ const validateSignUpData = (req) => {
     if (!name || !dateOfBirth || !username || !password) {
         throw new Error("Fill all Details!");
     }
+    if (!validator.isDate(dateOfBirth)) {
+        throw new Error("date of birth invalid.");
+    }
     if (!validator.isLength(name, { min: 3, max: 30 }))
         throw new Error("min chars:3 max chars:30!");
     if (!validator.isLength(username, { min: 3, max: 30 }))
         throw new Error("min chars:3 max chars:30!");
 
-    if (!validator.isStrongPassword(password)) {
+    if (!validator.isLength(password, { min: 8 })) {
         throw new Error(
-            "Invalid!\nPassword must include,\n minimum length 8 \n 1 lowercase\n 1 uppercase\n 1 number"
+            "\nInvalid!\nPassword must include,\n minimum length 8 \n 1 lowercase\n 1 uppercase\n 1 number"
         );
     }
 };
@@ -22,8 +25,10 @@ const validateLoginData = (req) => {
     if (!username || validator.isLength(username, { min: 3, max: 30 })) {
         throw new Error("Invalid Username");
     }
-    if (!password || validator.isStrongPassword(password)) {
-        throw new Error("Invalid Password");
+    if (!password || !validator.isLength(password, { min: 8 })) {
+        throw new Error(
+            "\nInvalid!\nPassword must include,\n minimum length 8 \n 1 lowercase\n 1 uppercase\n 1 number"
+        );
     }
 };
 
