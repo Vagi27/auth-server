@@ -4,7 +4,6 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const JWT_Secret_Key = require("../config/config").JWT_Secret_Key;
 
-
 const {
     validateSignUpData,
     validateLoginData,
@@ -12,6 +11,8 @@ const {
 
 authRouter.post("/signup", async (req, res) => {
     try {
+        console.log("signup request received");
+
         validateSignUpData(req);
         const user = new User(req.body);
 
@@ -30,6 +31,7 @@ authRouter.post("/signup", async (req, res) => {
 });
 authRouter.post("/login", async (req, res) => {
     try {
+        console.log("login request received");
         validateLoginData(req);
         const { username, password } = req.body;
 
@@ -49,8 +51,10 @@ authRouter.post("/login", async (req, res) => {
         };
         const token = jwt.sign(payload, JWT_Secret_Key);
         // console.log(token);
-        res.cookie("token", token);
-        res.send("login successful");
+        res.cookie("token", token, {
+            httpOnly: true,
+        });
+        return res.status(200).json({ message: "Login successful", payload });
     } catch (err) {
         res.send("something went wrong in login\n" + err.message);
     }
