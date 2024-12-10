@@ -22,7 +22,7 @@ const validateSignUpData = (req) => {
 };
 const validateLoginData = (req) => {
     const { username, password } = req.body;
-    if (!username || validator.isLength(username, { min: 3, max: 30 })) {
+    if (!username || !validator.isLength(username, { min: 3, max: 30 })) {
         throw new Error("Invalid Username");
     }
     if (!password || !validator.isLength(password, { min: 8 })) {
